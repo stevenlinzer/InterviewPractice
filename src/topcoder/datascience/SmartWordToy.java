@@ -1,7 +1,6 @@
 package topcoder.datascience;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,25 +44,17 @@ public class SmartWordToy {
 					else downChar = iChar - 1;	// one down
 					startChars[i] = (char)upChar;
 					String string = String.valueOf(startChars);
-					Date d1 = new Date();
 					boolean contains = visited.contains(string);
-					Date d2 = new Date();
 					if (!contains) {
 						newCandidates.add(string);
-						Date da1 = new Date();
 						visited.add(string);
-						Date da2 = new Date();
 					}
 					startChars[i] = (char)downChar;
 					string = String.valueOf(startChars);
-					d1 = new Date();
 					contains = visited.contains(string);
-					d2 = new Date();
 					if (!contains) {
 						newCandidates.add(string);
-						Date da1 = new Date();
 						visited.add(string);
-						Date da2 = new Date();
 					}
 				}
 			}

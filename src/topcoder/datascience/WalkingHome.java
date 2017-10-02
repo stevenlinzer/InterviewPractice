@@ -77,16 +77,6 @@ public class WalkingHome {
 					lastY = Integer.parseInt(intSplit[0]);
 				}
 			}
-//			Old Code O(n**2)
-//			for (int i = 0; i < Y; i++) {
-//				for (int j = 0; j < X; j++) {
-//					if (considered[i][j] && distMap[i][j] < min) {
-//						min = distMap[i][j];
-//						lastX = j;
-//						lastY = i;
-//					}
-//				}
-//			}
 			if (min >= Integer.MAX_VALUE) return -1;
 			if (lastY == homeLoc[0] && lastX == homeLoc[1]) return min;
 //			System.out.println("Not considered (" + lastY + "," + lastX + ") min " + min);
