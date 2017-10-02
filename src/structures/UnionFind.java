@@ -1,10 +1,14 @@
 package structures;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import topcoder.datascience.GrafixMask;
 
@@ -12,23 +16,18 @@ public class UnionFind {
 	int array[];
 	int size[];
 	int maxTree;
+	Set<Integer> emptySet = new HashSet<>();
+	Map<Integer, List<Integer>> globalMap = new HashMap<>();
 	public UnionFind(int N) {
 		array = new int[N];
 		size = new int[N];
 		for (int i = 0; i < array.length; i++) {
 			array[i] = i;	// Each node is it's own root
 			size[i] = 1;	// with a tree size of one.
+			emptySet.add(i);
 		}
 		maxTree = -1;
 	}
-/*	For makes O(N**2)
-	void union(int a, int b) {
-		int aVal = array[a]; int bVal = array[b];
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == aVal) {array[i] = bVal;}
-		}
-	}
-*/
 	public void union(int a, int b) {
 		int rootA = root(a);
 		int rootB = root(b);
@@ -37,10 +36,34 @@ public class UnionFind {
 				array[rootA] = rootB;	// Change the root of A to be child of B.
 				size[rootB] += size[rootA];	// Add the size of the old tree to the root of the new parent.
 				updateMaxTree(rootB);
+				if (emptySet.contains(a)) {
+					emptySet.remove(a);
+				}
+				if (globalMap.containsKey(rootA)) {
+					globalMap.get(rootB).addAll(globalMap.get(rootA));
+					globalMap.remove(rootA);
+				} else {
+					globalMap.get(rootB).add(a);
+				}
 			} else {
 				array[rootB] = rootA;	// Change the root of A to be child of B.
 				size[rootA] += size[rootB];	// Add the size of the old tree to the root of the new parent.
 				updateMaxTree(rootA);
+				if (!globalMap.containsKey(rootA)) {
+					List<Integer> tempList = new ArrayList<Integer>();
+					tempList.add(a);
+					tempList.add(b);
+					globalMap.put(rootA, tempList);
+				} else {
+					if (globalMap.containsKey(rootB)) {
+						globalMap.get(rootA).addAll(globalMap.get(rootB));
+						globalMap.remove(rootB);
+					} else {
+						globalMap.get(rootA).add(b);
+					}
+				}
+				if (emptySet.contains(b)) {	emptySet.remove(b);	}
+				if (emptySet.contains(a)) {	emptySet.remove(a);	}
 			}
 		}
 	}
@@ -67,7 +90,6 @@ public class UnionFind {
 
 	public boolean find(int a, int b) {
 		return root(a) == root(b);
-//		if (array[a] == array[b]) {return true;} else {return false;}
 	}
 
 	public String toString() {
@@ -82,16 +104,17 @@ public class UnionFind {
 	}
 
 	public List<List<Integer>> getConnectedLists() {
-		Map<Integer, List<Integer>> map = new HashMap<>();
-		for (int i = 0; i < array.length; i++) {
-			if (!map.containsKey(root(array[i]))) {
-				map.put(root(array[i]), new ArrayList<Integer>());
-			}
-			map.get(root(array[i])).add(i);
-		}
 		List<List<Integer>> retVal = new ArrayList<>();
-		for (Entry<Integer, List<Integer>> entry : map.entrySet()) {
-			retVal.add(entry.getValue());
+		SortedSet<Integer> keys = new TreeSet<Integer>(globalMap.keySet());
+		for (Integer key : keys) { 
+			Integer[] arr = globalMap.get(key).toArray(new Integer[0]);
+			Arrays.sort(arr);
+			retVal.add(Arrays.asList(arr));
+		}
+		for (Integer empty : emptySet) {
+			List<Integer> list = new ArrayList<>();
+			list.add(empty);
+			retVal.add(list);
 		}
 		return retVal;
 	}
