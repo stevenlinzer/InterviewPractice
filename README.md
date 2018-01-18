@@ -16,7 +16,7 @@ Since I have used this structure in the solutions of a few problems, I discuss t
 ### Priority Queue
 The standard priority queue stores queued data in a sorted for where the greatest element is always at the "top". This is done by implementing a heap. A heap is a tree where the root node is always the greatest node. When instanciated, the queue is empty. There are two public methods that interact with the Priority Queue's data. The insert(Key) adds a new key to the queue and deleteMax() deletes maximum (root) from the heap and returns it. There are two private methods, sink and swim, that adjust the heap whenever it is modified. (Robert Sedgewick).
 
-## Topcoder Data Sciencs Problems
+## Topcoder Data Science Problems
 This website under the src folder contains solutions for Topcoder Data Science problems. This section is dedicated to explaining the solutions that I have coded for these problems. Please review each  problem on https://www.topcoder.com/ before reading my code and explanations. I invite anyone who can come up with a better solution offer it here.
 
 ### Capture Them All
